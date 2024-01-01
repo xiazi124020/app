@@ -220,22 +220,22 @@ export default function UserFormDialog({selected, handleClose, open}) {
           <Button
               variant='contained'
               edge='end'
-              endIcon={<SaveIcon />}
-              color="success"
-              sx={{ width: 140, heigth: 30 }}
-              onClick={handleRetister}
-              >
-              保存
-          </Button>
-          <Button
-              variant='contained'
-              edge='end'
               endIcon={<CancelIcon />}
               color="error"
               sx={{ width: 140, heigth: 30 }}
               onClick={handleCloseUserDialog}
               >
               キャンセル
+          </Button>
+          <Button
+              variant='contained'
+              edge='end'
+              endIcon={<SaveIcon />}
+              color="success"
+              sx={{ width: 140, heigth: 30 }}
+              onClick={handleRetister}
+              >
+              {isEmpty(formData.id) ? '登録': '更新'}
           </Button>
         </DialogActions>
       </BootstrapDialog>

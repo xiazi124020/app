@@ -36,5 +36,5 @@ async def get_all_users(name, sex, dept_id, status, page_num, page_size):
 
     if user is not None:
         data = [dict(ret) for ret in user]
-        
-    return data, page_num, count
+        return data, page_num, count
+    return None, page_num, count

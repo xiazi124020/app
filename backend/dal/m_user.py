@@ -135,7 +135,7 @@ class TUser:
         params = []
         i = 1
         if name is not None and name != '':
-            sql_cond += f" AND (a.name like ${i} or a.name_kana like ${i+1} "
+            sql_cond += f" AND (a.name like ${i} or a.name_kana like ${i+1}) "
             params.append('%' + name  + '%')
             params.append('%' + name  + '%')
             i = i + 2

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
 export function CustomTextField(props) {
-  const { label, name, handleChange, errorMessage,required,select,disabled=false,options=[], value, ...rest } = props;
+  const { maxlength=255, label, name, handleChange, errorMessage,required,select,disabled=false,options=[], value, ...rest } = props;
   return (
     <TextField
       select={select}
@@ -21,6 +21,7 @@ export function CustomTextField(props) {
       {...rest}
       multiline={true}
       minRows={1}
+      inputProps={{ maxLength: maxlength }}
       size={"small"}
     >
       {options != null && options.length > 0 && options.map((item) => {

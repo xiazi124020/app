@@ -128,22 +128,22 @@ function UserList() {
           
           <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end', }}>
             <Button
-              variant="contained"
-              edge="end" 
-              endIcon={<SearchIcon />}
-              style={{width: 120, marginTop: 20, marginRight:3, heigth: 40 }}
-              onClick={handleSearch}
-            >
-              検索
-            </Button>
-            <Button
               variant='contained'
               edge='end'
               endIcon={<ClearIcon />}
-              style={{ width: 120, marginTop: 20, heigth: 40 }}
+              style={{ width: 120, marginRight:3, marginTop: 20, heigth: 40 }}
               onClick={handleClear}
             >
               クリア
+            </Button>
+            <Button
+              variant="contained"
+              edge="end" 
+              endIcon={<SearchIcon />}
+              style={{width: 120, marginTop: 20, heigth: 40 }}
+              onClick={handleSearch}
+            >
+              検索
             </Button>
           </Grid>
 

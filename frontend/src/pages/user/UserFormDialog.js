@@ -114,14 +114,15 @@ export default function UserFormDialog({selected, handleClose, open}) {
     formData.is_admin = false
     formData.status = ''
     setFormData({...formData})
+    setError('')
+    setErrors('')
   };
 
   // 初期表示
   useEffect(() => {
+    handleClear()
     if(selected && selected.length > 0) {
       handleSearch()
-    } else {
-      handleClear()
     }
   }, [selected]);
 

@@ -21,27 +21,27 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from "./UserFormDialog";
 
-const generateTestData = (numRows) => {
-    const testData = [];
-    for (let i = 1; i <= numRows; i++) {
-        const paddedNumber = String(i).padStart(4, '0');
-        const phoneNumber = `070-1234-${paddedNumber}`;
-        testData.push({
-            id: i,
-            emp_id: `JCL${i}`,
-            name: `Name${i}`,
-            name_kana: `NameKana${i}`,
-            email: `NameKana${i}@jcltk.com`,
-            phone: phoneNumber,
-            sex: i % 2 === 0 ? 'Male' : 'Female',
-            status: i % 2 === 0 ? 'Active' : 'Inactive',
-        });
-    }
+// const generateTestData = (numRows) => {
+//     const testData = [];
+//     for (let i = 1; i <= numRows; i++) {
+//         const paddedNumber = String(i).padStart(4, '0');
+//         const phoneNumber = `070-1234-${paddedNumber}`;
+//         testData.push({
+//             id: i,
+//             emp_id: `JCL${i}`,
+//             name: `Name${i}`,
+//             name_kana: `NameKana${i}`,
+//             email: `NameKana${i}@jcltk.com`,
+//             phone: phoneNumber,
+//             sex: i % 2 === 0 ? 'Male' : 'Female',
+//             status: i % 2 === 0 ? 'Active' : 'Inactive',
+//         });
+//     }
   
-    return testData;
-  };
+//     return testData;
+//   };
 
-const rows = generateTestData(50);
+// const rows = generateTestData(50);
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -95,6 +95,10 @@ const headCells = [
     {
         id: 'phone',
         label: '電話番号',
+    },
+    {
+        id: 'dept_name',
+        label: '所属部門',
     },
     {
         id: 'status',
@@ -269,12 +273,9 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function UserListTable() {
+export default function UserListTable({rows, selected, setSelected, handleSearch, formData, setFormData}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -311,31 +312,24 @@ export default function UserListTable() {
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    formData.page = newPage
+    setFormData({...formData})
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    formData.page = 0
+    formData.rowsPerPage = parseInt(event.target.value, 10)
+    setFormData({...formData})
   };
 
-
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage],
-  );
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected} handleSearch={handleSearch} />
         <TableContainer sx={{ maxHeight: 600 }}>
+        {rows && rows.length > 0 ? 
           <Table
             stickyHeader
             aria-labelledby="tableTitle"
@@ -350,7 +344,7 @@ export default function UserListTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -380,22 +374,26 @@ export default function UserListTable() {
                     <TableCell >{row.sex}</TableCell>
                     <TableCell >{row.email}</TableCell>
                     <TableCell >{row.phone}</TableCell>
+                    <TableCell >{row.dept_name}</TableCell>
                     <TableCell >{row.status}</TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
+            : 
+          <div align="left" style={{ whiteSpace: 'nowrap', marginLeft: 10}}><h3>検索結果なし</h3></div>}
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {rows && rows.length > 0 ? 
+            <TablePagination
+                rowsPerPageOptions={[20, 50, 100]}
+                component="div"
+                count={formData.data_count}
+                rowsPerPage={formData.page_size}
+                page={formData.page_num}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+        />:""}
       </Paper>
     </Box>
   );

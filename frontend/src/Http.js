@@ -19,23 +19,9 @@ export const post = (url, data, formData) => {
     })
 }
 
-export const post1 = (url, data) => {
-  return axios
-    .post(`${apiUrl}${url}`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'apiKey': apiKey
-      }
-    })
-    .then((response) => response.data)
-    .catch((error) => {
-      throw error
-    })
-}
-
 export const get = (url, params) => {
   return axios
-    .get(`${apiUrl}${url}`, {params, headers: {'apikey': apiKey}})
+    .get(`${apiUrl}${url}`, {params})
     .then((response) => response.data)
     .catch((error) => {
       throw error

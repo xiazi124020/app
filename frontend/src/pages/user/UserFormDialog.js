@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import { Button, Grid, Checkbox, FormControlLabel} from '@mui/material';
+import { Button, Grid, Checkbox, FormControlLabel, Alert, Portal, Dialog, DialogTitle, DialogContent,DialogActions } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {CustomTextField} from '../../common/components/CustomTextField';
-import {SEX} from '../../common/Constants';
-import { post, get, del } from '../../Http';
+import {SEX, STATUS} from '../../common/Constants';
+import { post, get, del, put } from '../../Http';
 import Loading from '../../common/Loading';
 import { MESSAGE } from "../../common/Constants";
+import {isEmpty} from '../../common/CommonUtils';
+import CompleteDialog from '../../common/CompleteDialog';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -22,7 +20,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UserFormDialog({id, selected, handleClose, open}) {
+export default function UserFormDialog({selected, handleClose, open}) {
   const handleCloseUserDialog = () => {
     handleClose();
   };
@@ -30,7 +28,7 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = useState();
   const [formData, setFormData] = useState({
-    id: id,
+    id: selected[0] ? selected[0]: null,
     name: '',
     name_kana: '',
     emp_id: -1,
@@ -44,9 +42,6 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
     password:'',
     is_admin:false,
     status:'',
-    page: 0,
-    rowsPerPage: 20,
-    data_count: 0
   });
 
   const handleChange = (e) => {
@@ -54,6 +49,13 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
     setFormData({ ...formData, [name]: value });
   };
   
+  const [message, setMessage] = useState();
+  const [title, setTitle] = useState();
+  const [openComplete, setOpenComplete] = React.useState(false);
+  const handleCloseOpenComplete = () => {
+    setOpenComplete(false);
+  };
+
   const handleChangeCheck = (event) => {
     if (event.target.checked) {
       setFormData({ ...formData, ['is_admin']: true });
@@ -68,41 +70,68 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
     get(`/user/${selected[0]}`)
     .then(response => {
       if(response['status_code'] === 200) {
+        setError('')
         const updatedFormData = { ...formData, ...response.data };
         setFormData(updatedFormData);
-        setFormData(updatedFormData)
       } else {
         setError(MESSAGE['E0001'])
       }
       setIsLoading(false);
     })
     .catch(error => {
+      setError(MESSAGE['E0001'])
       setIsLoading(false);
     });
   }
 
   // 初期表示
   useEffect(() => {
-    handleSearch()
+    if(selected && selected.length > 0) {
+      handleSearch()
+    }
   }, [selected]);
 
-  //検索
+  //登録
   const handleRetister = () => {
     setIsLoading(true);
-    post(`/fpro001/${formData.id}`, formData)
-    .then(response => {
-      if(response['status_code'] === 200) {
-        const updatedFormData = { ...formData, ...response.data };
-        setFormData(updatedFormData);
-        setFormData(updatedFormData)
-      } else {
+    if(isEmpty(formData.id)) {
+      post(`/user`, formData)
+      .then(response => {
+        if(response['status_code'] === 200) {
+          formData.id = response.data
+          setFormData({...formData});
+          setError('')
+          setMessage("社員を登録完了しました。")
+          setTitle("社員管理")
+          setOpenComplete(true)
+        } else {
+          setError(MESSAGE['E0001'])
+        }
+        setIsLoading(false);
+      })
+      .catch(error => {
         setError(MESSAGE['E0001'])
-      }
-      setIsLoading(false);
-    })
-    .catch(error => {
-      setIsLoading(false);
-    });
+        setIsLoading(false);
+      });
+    } else {
+      put(`/user/${formData.id}`, formData)
+      .then(response => {
+        if(response['status_code'] === 200) {
+          setFormData({...formData});
+          setError('')
+          setMessage("社員情報を更新完了しました。")
+          setTitle("社員管理")
+          setOpenComplete(true)
+        } else {
+          setError(MESSAGE['E0001'])
+        }
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setError(MESSAGE['E0001'])
+        setIsLoading(false);
+      });
+    }
   }
 
 
@@ -119,12 +148,13 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
         <DialogTitle sx={{ m: 0, p: 1, backgroundColor:'#F0FFFF',minHeight: 50, height: 50, }} id="customized-dialog-title">
           {selected && selected.length > 0 ? '社員編集': '社員追加'}
         </DialogTitle>
-        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#E0FFFF', }}>
-      
+        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#F0F8FF', }}>
+          {error && (
+            <Alert severity="error" style={{width: '100%'}}>
+              {error}
+            </Alert>
+          )}
           <Grid container spacing={1}>
-            <Grid item xs={4}>
-              <CustomTextField label="社員番号" name='emp_id' handleChange={handleChange} disabled={true} sx={{ backgroundColor:'#F5F5F5' }} />
-            </Grid>
             <Grid item xs={4}>
               <CustomTextField label="姓名" name='name' handleChange={handleChange} />
             </Grid>
@@ -147,6 +177,9 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
               <CustomTextField label="パスワード" name='password' handleChange={handleChange} />
             </Grid>
             <Grid item xs={4}>
+              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} />
+            </Grid>
+            <Grid item xs={4}>
               <FormControlLabel control={<Checkbox checked={formData.is_admin} onChange={handleChangeCheck} />} label="管理者" />
             </Grid>
             <Grid item xs={2}>
@@ -164,7 +197,7 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
               endIcon={<SaveIcon />}
               color="success"
               sx={{ width: 140, heigth: 30 }}
-              onClick={handleCloseUserDialog}
+              onClick={handleRetister}
               >
               保存
           </Button>
@@ -180,6 +213,7 @@ export default function UserFormDialog({id, selected, handleClose, open}) {
           </Button>
         </DialogActions>
       </BootstrapDialog>
+      <CompleteDialog open={openComplete} handleCloseOpenComplete={handleCloseOpenComplete} title={title} message={message} />
     </React.Fragment>
   );
 }

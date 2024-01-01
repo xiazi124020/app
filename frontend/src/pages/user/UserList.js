@@ -1,28 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { get } from '../../Http';
 import Navbar from '../../common/Navbar';
-import { Button, Grid, FormControl, Divider } from '@mui/material';
+import { Button, Grid, FormControl, Divider, Alert } from '@mui/material';
 import Loading from '../../common/Loading';
 import {CustomTextField} from '../../common/components/CustomTextField';
 import {  Box } from "@mui/system";
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import UserListTable from './UserListTable';
-const sex_options =[
-    { name: "男性", id: 0 },
-    { name: "女性", id: 1 }
-]
+import {SEX, STATUS} from '../../common/Constants';
+import { MESSAGE } from "../../common/Constants";
 
 const dept_options =[
     { name: "部門１", id: 0 },
     { name: "部門２", id: 1 }
 ]
 
-const status_options =[
-    { name: "稼働中", id: 0 },
-    { name: "待機中", id: 1 },
-    { name: "離任", id: 2 }
-]
 function UserList() {
   const classes = {
     root: {
@@ -34,33 +27,37 @@ function UserList() {
   const [selected, setSelected] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    sex: 0,
-    dept_id: -1,
-    status: 0,
-    page: 0,
-    rowsPerPage: 20,
-    data_count: 0
+    sex: null,
+    dept_id: null,
+    status: null,
+    page_num: 0,
+    page_size: 20,
+    data_count: 0,
   });
 
+  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   //検索
   const handleSearch = () => {
     setSelected([])
     setIsLoading(true);
-    get('/fpro001', formData)
+    get('/user/all', formData)
     .then(response => {
       if(response['status_code'] === 200) {
         setRows(response.data)
+        setError('')
         formData.data_count = response.page_info.count
         formData.page = response.page_info.page_num
         setFormData({...formData})
       } else {
         setRows([])
+        setError(MESSAGE['E0001'])
       }
       setIsLoading(false);
     })
     .catch(error => {
+        setError(MESSAGE['E0001'])
       setIsLoading(false);
     });
   }
@@ -69,7 +66,7 @@ function UserList() {
   useEffect(() => {
     setIsLoading(true);
     handleSearch()
-  }, [formData.page, formData.rowsPerPage]);
+  }, [formData.page_num, formData.page_size]);
 
 
   const handleChange = (e) => {
@@ -80,9 +77,9 @@ function UserList() {
   // クリア
   const handleClear = () => {
     formData.name = ''
-    formData.dept_id = ''
-    formData.sex = ''
-    formData.status = ''
+    formData.dept_id = null
+    formData.sex = null
+    formData.status = null
     setFormData({...formData})
   };
 
@@ -92,6 +89,11 @@ function UserList() {
       <Loading />
     )}
       <Box sx={classes.root} >
+          {error && (
+            <Alert severity="error" style={{width: '100%'}}>
+              {error}
+            </Alert>
+          )}
         <Grid container spacing={1} >
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
@@ -101,7 +103,7 @@ function UserList() {
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="性別" name='sex' handleChange={handleChange} select={'select'} options={sex_options} />
+              <CustomTextField label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} />
             </FormControl>
           </Grid>
           
@@ -113,7 +115,7 @@ function UserList() {
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={status_options} />
+              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} />
             </FormControl>
           </Grid>
           
@@ -140,8 +142,7 @@ function UserList() {
 
         </Grid>
         <Divider style={{marginTop :5, marginBottom:5}}/>
-        
-        <UserListTable />
+        <UserListTable rows={rows} selected={selected} setSelected={setSelected} handleSearch={handleSearch} formData={formData} setFormData={setFormData} />
       </Box>
     </Navbar>
   );

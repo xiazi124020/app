@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS t_user CASCADE;
 CREATE TABLE t_user (
   id SERIAL PRIMARY KEY NOT NULL,
   dept_id INT DEFAULT NULL ,
-  emp_id INT DEFAULT NULL ,
+  emp_id varchar(255) DEFAULT NULL ,
   name varchar(255) DEFAULT NULL ,
   name_kana varchar(255) DEFAULT NULL ,
   sex INT DEFAULT NULL ,
@@ -26,6 +26,19 @@ CREATE TABLE t_user (
   create_by varchar(255) DEFAULT NULL,
   update_by varchar(255) DEFAULT NULL,
   pwd_reset_time TIMESTAMP  DEFAULT NULL,
-  create_time TIMESTAMP  DEFAULT NULL ,
-  update_time TIMESTAMP  DEFAULT NULL
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL ,
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL
+);
+
+DROP TABLE IF EXISTS t_dept CASCADE;
+CREATE TABLE t_dept (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name varchar(255) DEFAULT NULL ,
+  location INT DEFAULT NULL ,
+  is_deleted boolean DEFAULT false ,
+  create_by varchar(255) DEFAULT NULL,
+  update_by varchar(255) DEFAULT NULL,
+  pwd_reset_time TIMESTAMP  DEFAULT NULL,
+  create_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL ,
+  update_time TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL
 ) 

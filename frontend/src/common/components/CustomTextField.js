@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
 export function CustomTextField(props) {
-  const { label, name, handleChange, errorMessage,required,select,disabled=false,options=[], ...rest } = props;
+  const { label, name, handleChange, errorMessage,required,select,disabled=false,options=[], value, ...rest } = props;
   return (
     <TextField
       select={select}
@@ -12,6 +12,7 @@ export function CustomTextField(props) {
       id={name}
       label={label}
       name={name}
+      value={value}
       onChange={handleChange}
       error={Boolean(errorMessage)}
       helperText={errorMessage}

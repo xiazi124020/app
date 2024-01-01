@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { get } from '../../Http';
 import Navbar from '../../common/Navbar';
 import { Button, Grid, FormControl, Divider, Alert } from '@mui/material';
 import Loading from '../../common/Loading';
@@ -10,6 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import UserListTable from './UserListTable';
 import {SEX, STATUS} from '../../common/Constants';
 import { MESSAGE } from "../../common/Constants";
+import { get, del } from '../../Http';
 
 const dept_options =[
     { name: "部門１", id: 0 },
@@ -23,6 +23,13 @@ function UserList() {
       zIndex: 9999
     },
   }
+
+  const [message, setMessage] = useState();
+  const [title, setTitle] = useState();
+  const [openComplete, setOpenComplete] = React.useState(false);
+  const handleCloseOpenComplete = () => {
+    setOpenComplete(false);
+  };
 
   const [selected, setSelected] = useState([]);
   const [formData, setFormData] = useState({
@@ -97,25 +104,25 @@ function UserList() {
         <Grid container spacing={1} >
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="社員名" name='name' handleChange={handleChange} />
+              <CustomTextField label="社員名" name='name' handleChange={handleChange} value={formData.name} />
               </FormControl>
           </Grid>
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} />
+              <CustomTextField label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} value={formData.sex} />
             </FormControl>
           </Grid>
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={dept_options} />
+              <CustomTextField label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={dept_options} value={formData.dept_id} />
             </FormControl>
           </Grid>
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} />
+              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} value={formData.status} />
             </FormControl>
           </Grid>
           
@@ -124,7 +131,7 @@ function UserList() {
               variant="contained"
               edge="end" 
               endIcon={<SearchIcon />}
-              style={{width: 120, marginTop: 25, marginRight:3, heigth: 70 }}
+              style={{width: 120, marginTop: 20, marginRight:3, heigth: 40 }}
               onClick={handleSearch}
             >
               検索
@@ -133,7 +140,7 @@ function UserList() {
               variant='contained'
               edge='end'
               endIcon={<ClearIcon />}
-              style={{ width: 120, marginTop: 25, heigth: 70 }}
+              style={{ width: 120, marginTop: 20, heigth: 40 }}
               onClick={handleClear}
             >
               クリア

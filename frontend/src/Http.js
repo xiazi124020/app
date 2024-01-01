@@ -56,9 +56,9 @@ export const putFormData = (url, data) => {
     })
 }
 
-export const del = (url) => {
+export const del = (url, data) => {
   return axios
-    .delete(`${apiUrl}${url}`, {headers: {'apiKey': apiKey}})
+    .delete(`${apiUrl}${url}`, {data, headers: {'apiKey': apiKey}})
     .then((response) => response.data)
     .catch((error) => {
       throw error

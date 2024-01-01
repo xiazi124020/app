@@ -22,3 +22,8 @@ export const formatNumberWithCommas = (number) => {
   }
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const findNameById = (id, array) => {
+  const foundItem = array.find(item => item.id === id);
+  return foundItem ? foundItem.name : null;
+};

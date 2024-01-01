@@ -71,11 +71,11 @@ async def user_put(id: int, data: dict = Body(...)):
     return {"status": 500, "data": ret, "error": 'update error'}
 
 # 社員削除
-@router.delete("/{id}")
-async def user_delete(id: int):
-    print("--------------------社員開始--------------------")
-    ret = await biz_user.delete(id)
-    if ret >= 0:
+@router.delete("")
+async def user_delete(data: dict = Body(...)):
+    print("--------------------社員削除開始--------------------")
+    ret = await biz_user.delete(data)
+    if ret == 0:
         json_result = {
             "status_code": 200,
             "data": ret,

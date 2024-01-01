@@ -11,6 +11,16 @@ import { MESSAGE } from "../../common/Constants";
 import {isEmpty} from '../../common/CommonUtils';
 import CompleteDialog from '../../common/CompleteDialog';
 
+const formErrorsMessage = {
+  name: '姓名が未入力です',
+  name_kana: '姓名(かな)が未入力です',
+  sex: '性別が未入力です',
+  status: 'ステータスが未入力です',
+  email: 'E-mailが未入力です',
+  phone: '電話番号が未入力です',
+  password: 'パスワードが未入力です'
+}
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -27,13 +37,14 @@ export default function UserFormDialog({selected, handleClose, open}) {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = useState();
+  const [errors, setErrors] = useState();
   const [formData, setFormData] = useState({
     id: selected[0] ? selected[0]: null,
     name: '',
     name_kana: '',
-    emp_id: -1,
+    emp_id: null,
     sex: 0,
-    dept_id: -1,
+    dept_id: null,
     status: 0,
     phone: '',
     email:'',
@@ -72,6 +83,8 @@ export default function UserFormDialog({selected, handleClose, open}) {
       if(response['status_code'] === 200) {
         setError('')
         const updatedFormData = { ...formData, ...response.data };
+        console.log(updatedFormData)
+        console.log(response.data)
         setFormData(updatedFormData);
       } else {
         setError(MESSAGE['E0001'])
@@ -93,6 +106,19 @@ export default function UserFormDialog({selected, handleClose, open}) {
 
   //登録
   const handleRetister = () => {
+    
+    const errors = {}
+    Object.keys(formErrorsMessage).forEach((key) => {
+      if (isEmpty(formData[key])) {
+        errors[key] = formErrorsMessage[key]
+      }
+    })
+    
+    setErrors(errors)
+    if (Object.values(errors).length) {
+      return
+    }
+
     setIsLoading(true);
     if(isEmpty(formData.id)) {
       post(`/user`, formData)
@@ -156,37 +182,37 @@ export default function UserFormDialog({selected, handleClose, open}) {
           )}
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <CustomTextField label="姓名" name='name' handleChange={handleChange} />
+              <CustomTextField value={formData.name} label="姓名" name='name' handleChange={handleChange} required={true} errorMessage={errors?.name} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="姓名(かな)" name='name_kana' handleChange={handleChange} />
+              <CustomTextField value={formData.name_kana} label="姓名(かな)" name='name_kana' handleChange={handleChange} required={true} errorMessage={errors?.name_kana} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} />
+              <CustomTextField value={formData.sex} label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} required={true} errorMessage={errors?.sex} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="部門" name='dept_id' handleChange={handleChange} select={'select'} />
+              <CustomTextField value={formData.dept_id} label="部門" name='dept_id' handleChange={handleChange} select={'select'} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="E-mail" name='email' handleChange={handleChange}  />
+              <CustomTextField value={formData.email} label="E-mail" name='email' handleChange={handleChange} required={true} errorMessage={errors?.email} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="電話番号" name='phone' handleChange={handleChange} />
+              <CustomTextField value={formData.phone} label="電話番号" name='phone' handleChange={handleChange} errorMessage={errors?.phone} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="パスワード" name='password' handleChange={handleChange} />
+              <CustomTextField value={formData.password} label="パスワード" name='password' handleChange={handleChange} required={true} errorMessage={errors?.password} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} />
+              <CustomTextField value={formData.status} label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} required={true} errorMessage={errors?.status} />
             </Grid>
             <Grid item xs={4}>
               <FormControlLabel control={<Checkbox checked={formData.is_admin} onChange={handleChangeCheck} />} label="管理者" />
             </Grid>
             <Grid item xs={2}>
-              <CustomTextField label="郵便番号" name='zip_code' handleChange={handleChange} />
+              <CustomTextField value={formData.zip_code} label="郵便番号" name='zip_code' handleChange={handleChange} />
             </Grid>
             <Grid item xs={10}>
-              <CustomTextField label="住所" name='address' handleChange={handleChange} />
+              <CustomTextField value={formData.address} label="住所" name='address' handleChange={handleChange} />
             </Grid>
           </Grid>
         </DialogContent>

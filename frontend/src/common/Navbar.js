@@ -123,24 +123,34 @@ export default function Navbar({ children, pageTitle }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader sx={{backgroundColor: '#1976d2', textAlign: 'left'}}>
-          株式会社ジェーシーエル
-        </DrawerHeader>
+      
+        <Typography variant="h6" noWrap component="div" 
+          sx={{
+            backgroundColor: '#1976d2',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            minHeight: 64,
+          }}
+        >
+        株式会社ジェーシーエル
+        </Typography>
         <Divider />
         <List>
           <ListItemButton
             component={Link}
-            to="/"
+            to="/top"
             style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
           >
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary={"トップ画面"} />
+            <ListItemText primary={"トップ"} />
           </ListItemButton>
           <ListItemButton
             component={Link}
-            to="/"
+            to="/user"
             style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
           >
             <ListItemIcon>
@@ -167,6 +177,16 @@ export default function Navbar({ children, pageTitle }) {
               <PaidIcon />
             </ListItemIcon>
             <ListItemText primary={"お客様"} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/master"
+            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+          >
+            <ListItemIcon>
+              <PaidIcon />
+            </ListItemIcon>
+            <ListItemText primary={"マスター"} />
           </ListItemButton>
         </List>
         <Divider />

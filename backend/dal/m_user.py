@@ -23,8 +23,7 @@ class TUser:
         except Exception as e:
             print(e)
             return None
-        print(row)
-        return row
+        return dict(row)
 
     @classmethod
     async def insert(cls, data):
@@ -34,7 +33,7 @@ class TUser:
         col_names.remove("id")
         col_names.remove("create_time")
         col_names.remove("update_time")
-        col_names.remove("is_deleted")
+        data['is_deleted'] = False
         data['create_by'] = 'admin'
         data['update_by'] = 'admin'
         try:
@@ -43,7 +42,6 @@ class TUser:
                 result = await db.fetchval(sequence_sql)
                 data['emp_id'] = PREFIX + str(result).zfill(7)
                 sq.build_insert(cls.table_name, col_names, data, "id")
-                print(sq)
                 result = await sq.fetchval(db)
         except Exception as e:
             print(e)
@@ -101,17 +99,24 @@ class TUser:
         return count
 
     @classmethod
-    async def delete(cls, id):
+    async def delete(cls, data):
+        ids = data.get("ids", [])
+
+        if not ids:
+            return None
+
+        placeholders = ', '.join(f'${i}' for i in range(1, len(ids) + 1))
+
         delete_sql = f"""
-            update t_user set is_deleted = true where id = $1
+            UPDATE t_user SET is_deleted = true WHERE id in ({placeholders})
         """
         try:
             async with DBPool.acquire() as db:
-                await db.execute(delete_sql, id)
+                await db.execute(delete_sql,  *ids)
         except Exception as e:
             print(e)
             return None
-        return id
+        return 0
 
     @classmethod
     async def get_all_users(cls, name, sex, dept_id, status, page_num, page_size):

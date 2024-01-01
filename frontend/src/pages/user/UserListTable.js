@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,6 +19,13 @@ import { visuallyHidden } from '@mui/utils';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import UserFormDialog from "./UserFormDialog";
+import {findNameById} from '../../common/CommonUtils';
+import {SEX, STATUS} from '../../common/Constants';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
+import { MESSAGE } from "../../common/Constants";
+import { del } from '../../Http';
+import Loading from '../../common/Loading';
+import CompleteDialog from '../../common/CompleteDialog';
 
 // const generateTestData = (numRows) => {
 //     const testData = [];
@@ -90,7 +96,7 @@ const headCells = [
     },
     {
         id: 'email',
-        label: 'e-mail',
+        label: 'E-Mail',
     },
     {
         id: 'phone',
@@ -163,8 +169,10 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected, selected } = props;
+  const { numSelected, selected, handleSearch } = props;
 
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [kbn, setKbn] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = (kbn) => {
@@ -173,7 +181,53 @@ function EnhancedTableToolbar(props) {
   };
   const handleClose = () => {
     setOpen(false);
+    handleSearch()
   };
+
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const handleClickOpenDelete = () => {
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const [message, setMessage] = useState();
+  const [title, setTitle] = useState();
+  const [openComplete, setOpenComplete] = React.useState(false);
+  const handleCloseOpenComplete = () => {
+    setOpenComplete(false);
+    handleSearch()
+  };
+
+  // 削除
+  const handleDelete = () => {
+    const postdata ={
+        ids: selected
+    }
+    setIsLoading(true);
+    if(selected && selected.length > 0) {
+      del(`/user`, postdata)
+      .then(response => {
+        if(response['status_code'] === 200) {
+          setError('')
+          setMessage("社員を削除しました。")
+          setTitle("社員削除")
+          setOpenComplete(true)
+        } else {
+          setError(MESSAGE['E0001'])
+        }
+        setOpenDelete(false);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setOpenDelete(false);
+        setError(MESSAGE['E0001'])
+        setIsLoading(false);
+      });
+    }
+  }
+
 
   return (
     <Toolbar
@@ -184,6 +238,9 @@ function EnhancedTableToolbar(props) {
         pr: { xs: 1, sm: 1 },
       }}
     >
+        {isLoading && (
+            <Loading />
+        )}
         <Typography
             sx={{ flex: '1 1 100%', }}
             variant="h6"
@@ -221,6 +278,7 @@ function EnhancedTableToolbar(props) {
                 endIcon={<DeleteForeverIcon />}
                 color="error"
                 sx={{ width: 140, heigth: 30 }}
+                onClick={() => {handleClickOpenDelete(); }}
                 >
                 削除
             </Button>
@@ -244,6 +302,7 @@ function EnhancedTableToolbar(props) {
                     endIcon={<DeleteForeverIcon />}
                     color="error"
                     sx={{ width: 140, heigth: 30 }}
+                    onClick={() => {handleClickOpenDelete(); }}
                     >
                     削除
                 </Button>
@@ -261,10 +320,12 @@ function EnhancedTableToolbar(props) {
             </Button>
       )}
       
-      <UserFormDialog
-        selected={kbn === 0 ? []: selected}
-        handleClose={handleClose}
-        open={open} />
+        <UserFormDialog
+            selected={kbn === 0 ? []: selected}
+            handleClose={handleClose}
+            open={open} />
+        <DeleteConfirmDialog title={'社員削除'} message={'本当に削除しますか。'} handleClose={handleCloseDelete} open={openDelete} handleDelete={handleDelete} />
+        <CompleteDialog open={openComplete} handleCloseOpenComplete={handleCloseOpenComplete} title={title} message={message} />
     </Toolbar>
   );
 }
@@ -371,11 +432,11 @@ export default function UserListTable({rows, selected, setSelected, handleSearch
                     <TableCell>{row.emp_id}</TableCell>
                     <TableCell >{row.name}</TableCell>
                     <TableCell >{row.name_kana}</TableCell>
-                    <TableCell >{row.sex}</TableCell>
+                    <TableCell >{findNameById(row.sex,SEX)}</TableCell>
                     <TableCell >{row.email}</TableCell>
                     <TableCell >{row.phone}</TableCell>
                     <TableCell >{row.dept_name}</TableCell>
-                    <TableCell >{row.status}</TableCell>
+                    <TableCell >{findNameById(row.status,STATUS)}</TableCell>
                   </TableRow>
                 );
               })}

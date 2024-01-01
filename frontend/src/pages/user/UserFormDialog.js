@@ -97,10 +97,31 @@ export default function UserFormDialog({selected, handleClose, open}) {
     });
   }
 
+  // クリア
+  const handleClear = () => {
+    formData.id = null
+    formData.name = ''
+    formData.name_kana = ''
+    formData.emp_id = null
+    formData.sex = 0;
+    formData.dept_id = null
+    formData.status = 0
+    formData.phone = ''
+    formData.email = ''
+    formData.zip_code = ''
+    formData.address = ''
+    formData.password = ''
+    formData.is_admin = false
+    formData.status = ''
+    setFormData({...formData})
+  };
+
   // 初期表示
   useEffect(() => {
     if(selected && selected.length > 0) {
       handleSearch()
+    } else {
+      handleClear()
     }
   }, [selected]);
 

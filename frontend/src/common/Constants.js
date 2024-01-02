@@ -12,3 +12,10 @@ export const STATUS = [
 export const MESSAGE = {
     E0001: '予期せぬエラーが発生しました。'
 }
+
+export const LOCATION = [
+    { id: 0, name: "東京"},
+    { id: 1, name: "大阪"},
+    { id: 2, name: "大連"},
+    { id: 3, name: "武漢"}
+   ];

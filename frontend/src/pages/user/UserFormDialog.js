@@ -4,8 +4,8 @@ import { Button, Grid, Checkbox, FormControlLabel, Alert, Portal, Dialog, Dialog
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {CustomTextField} from '../../common/components/CustomTextField';
-import {SEX, STATUS} from '../../common/Constants';
-import { post, get, del, put } from '../../Http';
+import {SEX, STATUS, EMP_DIV, POSITION} from '../../common/Constants';
+import { post, get, put } from '../../Http';
 import Loading from '../../common/Loading';
 import { MESSAGE } from "../../common/Constants";
 import {isEmpty} from '../../common/CommonUtils';
@@ -15,6 +15,9 @@ const formErrorsMessage = {
   name: '姓名が未入力です',
   name_kana: '姓名(かな)が未入力です',
   sex: '性別が未入力です',
+  emp_div: '社員種別が未入力です',
+  position: '役職が未入力です',
+  birthday: '生年月日が未入力です',
   status: 'ステータスが未入力です',
   email: 'E-mailが未入力です',
   phone: '電話番号が未入力です',
@@ -46,13 +49,15 @@ export default function UserFormDialog({selected, handleClose, open, depts}) {
     sex: 0,
     dept_id: null,
     status: 0,
+    emp_div: 0,
+    position: 3,
+    birthday: '',
     phone: '',
     email:'',
     zip_code:'',
     address:'',
     password:'',
     is_admin:false,
-    status:'',
   });
 
   const handleChange = (e) => {
@@ -193,10 +198,10 @@ export default function UserFormDialog({selected, handleClose, open, depts}) {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle sx={{ m: 0, p: 1, backgroundColor:'#F0FFFF',minHeight: 50, height: 50, }} id="customized-dialog-title">
+        <DialogTitle sx={{ m: 0, p: 1, backgroundColor:'#7FFFD4',minHeight: 50, height: 50, }} id="customized-dialog-title">
           {selected && selected.length > 0 ? '社員編集': '社員追加'}
         </DialogTitle>
-        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#F0F8FF', }}>
+        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#FFFFF0', }}>
           {error && (
             <Alert severity="error" style={{width: '100%'}}>
               {error}
@@ -213,7 +218,7 @@ export default function UserFormDialog({selected, handleClose, open, depts}) {
               <CustomTextField value={formData.sex} label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} required={true} errorMessage={errors?.sex} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField value={formData.dept_id} label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={depts} />
+              <CustomTextField value={formData.birthday} label="生年月日" name='birthday' handleChange={handleChange} required={true} multiline={false} type='date' errorMessage={errors?.birthday}  />
             </Grid>
             <Grid item xs={4}>
               <CustomTextField value={formData.email} label="E-mail" name='email' handleChange={handleChange} required={true} errorMessage={errors?.email} />
@@ -222,7 +227,16 @@ export default function UserFormDialog({selected, handleClose, open, depts}) {
               <CustomTextField value={formData.phone} label="電話番号" name='phone' handleChange={handleChange} errorMessage={errors?.phone} />
             </Grid>
             <Grid item xs={4}>
+              <CustomTextField value={formData.emp_div} label="社員種別" name='emp_div' handleChange={handleChange} select={'select'} options={EMP_DIV} required={true} errorMessage={errors?.emp_div} />
+            </Grid>
+            <Grid item xs={4}>
+              <CustomTextField value={formData.position} label="役職" name='position' handleChange={handleChange} select={'select'} options={POSITION} required={true} errorMessage={errors?.position} />
+            </Grid>
+            <Grid item xs={4}>
               <CustomTextField value={formData.password} label="パスワード" name='password' handleChange={handleChange} required={true} errorMessage={errors?.password} />
+            </Grid>
+            <Grid item xs={4}>
+              <CustomTextField value={formData.dept_id} label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={depts} />
             </Grid>
             <Grid item xs={4}>
               <CustomTextField value={formData.status} label="ステータス" name='status' handleChange={handleChange} select={'select'} options={STATUS} required={true} errorMessage={errors?.status} />

@@ -156,10 +156,10 @@ export default function DeptFormDialog({selected, handleClose, open}) {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle sx={{ m: 0, p: 1, backgroundColor:'#F0FFFF',minHeight: 50, height: 50, }} id="customized-dialog-title">
+        <DialogTitle sx={{ m: 0, p: 1, backgroundColor:'#7FFFD4',minHeight: 50, height: 50, }} id="customized-dialog-title">
           {selected && selected.length > 0 ? '部門編集': '部門追加'}
         </DialogTitle>
-        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#F0F8FF', }}>
+        <DialogContent dividers sx={{ minHeight: 500,backgroundColor:'#FFFFF0', }}>
           {error && (
             <Alert severity="error" style={{width: '100%'}}>
               {error}

@@ -19,7 +19,11 @@ import PeopleIcon from '@mui/icons-material/People';
 import ListIcon from '@mui/icons-material/List';
 import PaidIcon from '@mui/icons-material/Paid';
 import GroupsIcon from '@mui/icons-material/Groups';
-
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import PersonIcon from '@mui/icons-material/Person';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -92,6 +96,13 @@ export default function Navbar({ children, pageTitle }) {
     };
   }, [open]);
 
+  const [subMenuOpen, setSubMenuOpen] = React.useState(false);
+
+  const handleSubMenuClick = () => {
+    setSubMenuOpen(!subMenuOpen);
+  };
+
+
   return (
     <Box sx={{ display: 'flex' }} id="navbar-drawer">
       <CssBaseline />
@@ -142,23 +153,38 @@ export default function Navbar({ children, pageTitle }) {
           <ListItemButton
             component={Link}
             to="/top"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
           >
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary={"トップ"} />
           </ListItemButton>
-          <ListItemButton
-            component={Link}
-            to="/user"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
-          >
+          
+          <ListItemButton onClick={handleSubMenuClick} sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}>
             <ListItemIcon>
-              <PeopleIcon />
+              <PersonIcon />
             </ListItemIcon>
             <ListItemText primary={"社員"} />
+            {subMenuOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
+          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}>
+            <List component="div" disablePadding>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="/user">
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary={"社員管理"} />
+              </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }} component={Link} to="/user/worktime">
+                <ListItemIcon>
+                  <AccessTimeIcon />
+                </ListItemIcon>
+                <ListItemText primary={"勤務時間記入"} />
+              </ListItemButton>
+            </List>
+          </Collapse>
+
           <ListItemButton
             component={Link}
             to="/dept"

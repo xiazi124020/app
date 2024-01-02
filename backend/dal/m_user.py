@@ -9,7 +9,7 @@ import re
 
 class TUser:
     table_name = "t_user"
-    col_names = ('id', 'dept_id', 'emp_id', 'name', 'name_kana', 'sex', 'phone', 'email', 'zip_code', 'address', 'password', 'is_admin', 'status', 'is_deleted',
+    col_names = ('id', 'dept_id', 'emp_id', 'name', 'name_kana', 'sex', 'birthday', 'position', 'emp_div', 'phone', 'email', 'zip_code', 'address', 'password', 'is_admin', 'status', 'is_deleted',
     'create_by', 'update_by', 'pwd_reset_time', 'create_time', 'update_time')
 
     @classmethod
@@ -33,6 +33,7 @@ class TUser:
         col_names.remove("id")
         col_names.remove("create_time")
         col_names.remove("update_time")
+        data['birthday'] = datetime.strptime(data['birthday'], '%Y-%m-%d')
         data['is_deleted'] = False
         data['create_by'] = 'admin'
         data['update_by'] = 'admin'

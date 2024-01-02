@@ -18,4 +18,18 @@ export const LOCATION = [
     { id: 1, name: "大阪"},
     { id: 2, name: "大連"},
     { id: 3, name: "武漢"}
-   ];
+];
+
+export const POSITION = [
+    { id: 0, name: "代表取締役社長"},
+    { id: 1, name: "取締役"},
+    { id: 2, name: "部長"},
+    { id: 3, name: "一般社員"}
+];
+
+export const EMP_DIV = [
+    { id: 0, name: "正社員"},
+    { id: 1, name: "契約社員"},
+    { id: 2, name: "個人事業主"},
+    { id: 3, name: "BP"}
+];

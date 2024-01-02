@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { TextField, MenuItem } from '@mui/material';
+import { TextField, MenuItem, InputAdornment  } from '@mui/material';
 
 export function CustomTextField(props) {
-  const { maxlength=255, label, name, handleChange, errorMessage,required,select,disabled=false,options=[], value, ...rest } = props;
+  const { type='text', maxlength=255, label, name, handleChange, errorMessage,required,select,disabled=false,multiline=true,options=[], value, ...rest } = props;
   return (
     <TextField
       select={select}
+      type={type}
       margin="normal"
       required={required}
       fullWidth
       id={name}
+      color="success" 
       label={label}
       name={name}
       value={value}
@@ -19,9 +21,9 @@ export function CustomTextField(props) {
       InputLabelProps={{ shrink: true }}
       disabled={disabled}
       {...rest}
-      multiline={true}
+      multiline={multiline}
       minRows={1}
-      inputProps={{ maxLength: maxlength }}
+      inputProps={{ maxLength: maxlength,}}
       size={"small"}
     >
       {options != null && options.length > 0 && options.map((item) => {

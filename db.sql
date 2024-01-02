@@ -17,6 +17,7 @@ CREATE TABLE t_user (
   sex INT DEFAULT NULL ,
   birthday date DEFAULT NULL ,
   position INT DEFAULT NULL ,
+  emp_div INT DEFAULT NULL ,
   phone varchar(255) DEFAULT NULL ,
   email varchar(255) DEFAULT NULL ,
   zip_code varchar(255) DEFAULT NULL ,

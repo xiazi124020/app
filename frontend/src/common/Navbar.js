@@ -124,6 +124,7 @@ export default function Navbar({ children, pageTitle }) {
       </AppBar>
       <Drawer
         sx={{
+          height: '100%',
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
@@ -149,11 +150,14 @@ export default function Navbar({ children, pageTitle }) {
         株式会社ジェーシーエル
         </Typography>
         <Divider />
-        <List>
+        <List
+          sx={{
+            height: '100%',backgroundColor: "#F5FFFA",
+          }}>
           <ListItemButton
             component={Link}
             to="/top"
-            sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            sx={{ textAlign: "left" }}
           >
             <ListItemIcon>
               <HomeIcon />
@@ -161,14 +165,16 @@ export default function Navbar({ children, pageTitle }) {
             <ListItemText primary={"トップ"} />
           </ListItemButton>
           
-          <ListItemButton onClick={handleSubMenuClick} sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}>
+        <Divider />
+          <ListItemButton onClick={handleSubMenuClick} sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary={"社員"} />
             {subMenuOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit sx={{ backgroundColor: "#F5FFFA", textAlign: "left" }}>
+        <Divider />
+          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit sx={{ textAlign: "left" }}>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }} component={Link} to="/user">
                 <ListItemIcon>
@@ -176,49 +182,58 @@ export default function Navbar({ children, pageTitle }) {
                 </ListItemIcon>
                 <ListItemText primary={"社員管理"} />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} component={Link} to="/user/worktime">
+        <Divider />
+            <ListItemButton sx={{ pl: 4 }} component={Link} to="/user/worktime" style={{ textAlign: "left", backgroundColor: '#E0FFFF' }}>
                 <ListItemIcon>
                   <AccessTimeIcon />
                 </ListItemIcon>
                 <ListItemText primary={"勤務時間記入"} />
               </ListItemButton>
+
             </List>
           </Collapse>
 
+        <Divider />
           <ListItemButton
             component={Link}
             to="/dept"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            style={{ textAlign: "left" }}
           >
             <ListItemIcon>
               <GroupsIcon />
             </ListItemIcon>
             <ListItemText primary={"部門"} />
           </ListItemButton>
+          
+        <Divider />
           <ListItemButton
             component={Link}
             to="/"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}
           >
             <ListItemIcon>
               <ListIcon />
             </ListItemIcon>
-            <ListItemText primary={"案件"} />
+            <ListItemText primary={"案件"}/>
           </ListItemButton>
+          
+        <Divider />
           <ListItemButton
             component={Link}
             to="/"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            style={{ textAlign: "left" }}
           >
             <ListItemIcon>
               <PaidIcon />
             </ListItemIcon>
             <ListItemText primary={"お客様"} />
           </ListItemButton>
+          
+        <Divider />
           <ListItemButton
             component={Link}
             to="/master"
-            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+            sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}
           >
             <ListItemIcon>
               <PaidIcon />
@@ -226,7 +241,6 @@ export default function Navbar({ children, pageTitle }) {
             <ListItemText primary={"マスター"} />
           </ListItemButton>
         </List>
-        <Divider />
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

@@ -15,6 +15,8 @@ CREATE TABLE t_user (
   name varchar(255) DEFAULT NULL ,
   name_kana varchar(255) DEFAULT NULL ,
   sex INT DEFAULT NULL ,
+  birthday date DEFAULT NULL ,
+  position INT DEFAULT NULL ,
   phone varchar(255) DEFAULT NULL ,
   email varchar(255) DEFAULT NULL ,
   zip_code varchar(255) DEFAULT NULL ,

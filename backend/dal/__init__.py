@@ -4,3 +4,4 @@ from .pool import DBPool
 from .constants import *
 
 from .m_user import TUser
+from .m_dept import TDept

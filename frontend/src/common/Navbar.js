@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import PeopleIcon from '@mui/icons-material/People';
 import ListIcon from '@mui/icons-material/List';
 import PaidIcon from '@mui/icons-material/Paid';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const drawerWidth = 240;
 
@@ -157,6 +158,16 @@ export default function Navbar({ children, pageTitle }) {
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary={"社員"} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/dept"
+            style={{ backgroundColor: "#F5FFFA", textAlign: "left" }}
+          >
+            <ListItemIcon>
+              <GroupsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"部門"} />
           </ListItemButton>
           <ListItemButton
             component={Link}

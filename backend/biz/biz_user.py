@@ -5,14 +5,6 @@ async def get(id):
     
     return user
 
-async def get_all(name, email, sex, page_num, page_size):
-    user, page_num, count = await TUser.get_all(name, email, sex, page_num, page_size)
-
-    if user is not None:
-        data = [dict(ret) for ret in user]
-        
-    return data, page_num, count
-
 async def insert(data):
     count = await TUser.check_name(data)
     if count == -9:

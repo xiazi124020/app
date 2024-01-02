@@ -169,7 +169,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected, selected, handleSearch } = props;
+  const { numSelected, selected, handleSearch, depts } = props;
 
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -323,7 +323,8 @@ function EnhancedTableToolbar(props) {
         <UserFormDialog
             selected={kbn === 0 ? []: selected}
             handleClose={handleClose}
-            open={open} />
+            open={open} 
+            depts={depts} />
         <DeleteConfirmDialog title={'社員削除'} message={'本当に削除しますか。'} handleClose={handleCloseDelete} open={openDelete} handleDelete={handleDelete} />
         <CompleteDialog open={openComplete} handleCloseOpenComplete={handleCloseOpenComplete} title={title} message={message} />
     </Toolbar>
@@ -334,7 +335,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function UserListTable({rows, selected, setSelected, handleSearch, formData, setFormData}) {
+export default function UserListTable({rows, selected, setSelected, handleSearch, formData, setFormData, depts}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
 
@@ -388,7 +389,7 @@ export default function UserListTable({rows, selected, setSelected, handleSearch
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selected={selected} handleSearch={handleSearch} />
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected} handleSearch={handleSearch} depts={depts} />
         <TableContainer sx={{ maxHeight: 600 }}>
         {rows && rows.length > 0 ? 
           <Table

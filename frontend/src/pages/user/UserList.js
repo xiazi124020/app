@@ -45,28 +45,32 @@ function UserList() {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [rows, setRows] = React.useState([]);
+  const [depts, setDepts] = React.useState([]);
   //検索
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setSelected([])
     setIsLoading(true);
-    get('/user/all', formData)
-    .then(response => {
-      if(response['status_code'] === 200) {
+    const response = await get('/user/all', formData);
+    if(response['status_code'] === 200) {
         setRows(response.data)
         setError('')
         formData.data_count = response.page_info.count
         formData.page = response.page_info.page_num
         setFormData({...formData})
-      } else {
+    } else {
         setRows([])
         setError(MESSAGE['E0001'])
-      }
-      setIsLoading(false);
-    })
-    .catch(error => {
+    }
+    
+    const response_dept = await get('/dept/all', {});
+    if(response_dept['status_code'] === 200) {
+        setDepts(response_dept.data)
+        setError('')
+    } else {
+        setRows([])
         setError(MESSAGE['E0001'])
-      setIsLoading(false);
-    });
+    }
+    setIsLoading(false);
   }
 
   // 初期表示
@@ -116,7 +120,7 @@ function UserList() {
           
           <Grid item xs={2} >
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <CustomTextField label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={dept_options} value={formData.dept_id} />
+              <CustomTextField label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={depts} value={formData.dept_id} />
             </FormControl>
           </Grid>
           
@@ -149,7 +153,7 @@ function UserList() {
 
         </Grid>
         <Divider style={{marginTop :5, marginBottom:5}}/>
-        <UserListTable rows={rows} selected={selected} setSelected={setSelected} handleSearch={handleSearch} formData={formData} setFormData={setFormData} />
+        <UserListTable rows={rows} selected={selected} setSelected={setSelected} handleSearch={handleSearch} formData={formData} setFormData={setFormData} depts={depts} />
       </Box>
     </Navbar>
   );

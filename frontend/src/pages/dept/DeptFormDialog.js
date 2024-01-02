@@ -73,6 +73,7 @@ export default function DeptFormDialog({selected, handleClose, open}) {
 
   // クリア
   const handleClear = () => {
+    formData.id = ''
     formData.name = ''
     formData.location = ''
     setFormData({...formData})

@@ -30,7 +30,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function UserFormDialog({selected, handleClose, open}) {
+export default function UserFormDialog({selected, handleClose, open, depts}) {
   const handleCloseUserDialog = () => {
     handleClose();
   };
@@ -213,7 +213,7 @@ export default function UserFormDialog({selected, handleClose, open}) {
               <CustomTextField value={formData.sex} label="性別" name='sex' handleChange={handleChange} select={'select'} options={SEX} required={true} errorMessage={errors?.sex} />
             </Grid>
             <Grid item xs={4}>
-              <CustomTextField value={formData.dept_id} label="部門" name='dept_id' handleChange={handleChange} select={'select'} />
+              <CustomTextField value={formData.dept_id} label="部門" name='dept_id' handleChange={handleChange} select={'select'} options={depts} />
             </Grid>
             <Grid item xs={4}>
               <CustomTextField value={formData.email} label="E-mail" name='email' handleChange={handleChange} required={true} errorMessage={errors?.email} />

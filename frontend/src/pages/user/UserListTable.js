@@ -256,7 +256,6 @@ function EnhancedTableToolbar(props) {
                 variant='contained'
                 edge='end'
                 endIcon={<PersonAddIcon />}
-                color="success"
                 sx={{ width: 140, heigth: 30, marginRight: 1 }}
                 onClick={handleClickOpen}
                 onClick={() => {handleClickOpen(0); }}
@@ -290,7 +289,6 @@ function EnhancedTableToolbar(props) {
                     variant='contained'
                     edge='end'
                     endIcon={<PersonAddIcon />}
-                    color="success"
                     sx={{ width: 140, heigth: 30, marginRight: 1 }}
                     onClick={() => {handleClickOpen(0); }}
                     >
@@ -312,7 +310,6 @@ function EnhancedTableToolbar(props) {
               variant='contained'
               edge='end'
               endIcon={<PersonAddIcon />}
-              color="success"
               onClick={() => {handleClickOpen(0); }}
               sx={{ width: 120, heigth: 30 }}
             >

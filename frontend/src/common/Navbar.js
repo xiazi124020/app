@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -27,6 +27,11 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const drawerWidth = 240;
 
@@ -120,7 +125,52 @@ export default function Navbar({ children, pageTitle }) {
     setAnchorEl(null);
   };
 
+  const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  }));
+  
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    width: '100%',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create('width'),
+      [theme.breakpoints.up('sm')]: {
+        width: '12ch',
+        '&:focus': {
+          width: '20ch',
+        },
+      },
+    },
+  }));
 
+  const handleDelete = () => {
+    console.info('You clicked the delete icon.');
+  };
+  
   return (
     <Box sx={{ display: 'flex' }} id="navbar-drawer">
       <CssBaseline />
@@ -138,6 +188,15 @@ export default function Navbar({ children, pageTitle }) {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {pageTitle}
           </Typography>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
           {auth && (
             <div>
               <IconButton
@@ -190,10 +249,10 @@ export default function Navbar({ children, pageTitle }) {
         <Typography variant="h6" noWrap component="div" 
           sx={{
             backgroundColor: '#1976d2',
+            color: 'white',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'white',
             minHeight: 64,
           }}
         >
@@ -202,7 +261,7 @@ export default function Navbar({ children, pageTitle }) {
         <Divider />
         <List
           sx={{
-            height: '100%',backgroundColor: "#F5FFFA",
+            height: '100%',backgroundColor: '#E0FFFF'
           }}>
           <ListItemButton
             component={Link}
@@ -216,7 +275,10 @@ export default function Navbar({ children, pageTitle }) {
           </ListItemButton>
           
         <Divider />
-          <ListItemButton onClick={handleSubMenuClick} sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}>
+          <ListItemButton onClick={handleSubMenuClick} 
+            sx={{ textAlign: "left", 
+              // backgroundColor: '#E0FFFF' 
+            }}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
@@ -224,7 +286,7 @@ export default function Navbar({ children, pageTitle }) {
             {subMenuOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         <Divider />
-          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit sx={{ textAlign: "left" }}>
+          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit >
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }} component={Link} to="/user">
                 <ListItemIcon>
@@ -233,7 +295,7 @@ export default function Navbar({ children, pageTitle }) {
                 <ListItemText primary={"社員管理"} />
               </ListItemButton>
         <Divider />
-            <ListItemButton sx={{ pl: 4 }} component={Link} to="/user/worktime" style={{ textAlign: "left", backgroundColor: '#E0FFFF' }}>
+            <ListItemButton sx={{ pl: 4 }} component={Link} to="/user/worktime" >
                 <ListItemIcon>
                   <AccessTimeIcon />
                 </ListItemIcon>
@@ -259,7 +321,7 @@ export default function Navbar({ children, pageTitle }) {
           <ListItemButton
             component={Link}
             to="/"
-            sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}
+            sx={{ textAlign: "left", }}
           >
             <ListItemIcon>
               <ListIcon />
@@ -270,7 +332,7 @@ export default function Navbar({ children, pageTitle }) {
         <Divider />
           <ListItemButton
             component={Link}
-            to="/"
+            to="/customer"
             style={{ textAlign: "left" }}
           >
             <ListItemIcon>
@@ -283,10 +345,10 @@ export default function Navbar({ children, pageTitle }) {
           <ListItemButton
             component={Link}
             to="/master"
-            sx={{ textAlign: "left", backgroundColor: '#E0FFFF' }}
+            sx={{ textAlign: "left",  }}
           >
             <ListItemIcon>
-              <PaidIcon />
+              <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary={"マスター"} />
           </ListItemButton>

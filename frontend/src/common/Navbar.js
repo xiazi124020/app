@@ -261,7 +261,8 @@ export default function Navbar({ children, pageTitle }) {
         <Divider />
         <List
           sx={{
-            height: '100%',backgroundColor: '#E0FFFF'
+            height: '100%',
+            backgroundColor: '#E0FFFF'
           }}>
           <ListItemButton
             component={Link}

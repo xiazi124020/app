@@ -71,7 +71,7 @@ function LoginForm() {
   }, [handleEnterKeyPress]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',width: '100%',maxWidth: '400px', height: '100%',  padding: 2 }}>
+    <Box sx={{ color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',width: '100%',maxWidth: '400px', height: '100%',  padding: 2 }}>
       <Typography component="h2" variant="h6">
         <b>株式会社ジェーシーエル　OA管理システム</b>
       </Typography>
@@ -81,7 +81,7 @@ function LoginForm() {
         </Alert>
       )}
       <Divider style={{backgroundColor: "red"}} />
-      <Box component="form" noValidate sx={{ mt: 1 }}>
+      <Box component="form" noValidate sx={{ mt: 1, }}>
         <TextField
             onChange={handleInputChange}
             InputProps={{

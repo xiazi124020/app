@@ -5,8 +5,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import LockIcon from '@mui/icons-material/Lock';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {isEmpty} from '../common/CommonUtils';
-import { Loading } from '../common/Loading';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -15,7 +17,6 @@ function LoginForm() {
     setCaptcha(Math.floor(Math.random() * 1000000));
   };
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -23,6 +24,13 @@ function LoginForm() {
   });
 
   
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const alphanumericRegex = /^[a-zA-Z0-9]*$/;
@@ -36,11 +44,9 @@ function LoginForm() {
 
   const handleLogin = () => {
 
-    setIsLoading(true);
     if((formData.username === 'admin' && formData.password === 'admin')) {
       sessionStorage.setItem('token', "0");
       sessionStorage.setItem('username', formData.username );
-      setIsLoading(false);
       // if (location) {
       //   const search = window.location.search;
       //   const queryParams = parseQueryStringToJSON(search);
@@ -52,7 +58,6 @@ function LoginForm() {
       navigate('/top');
     } else {
       setError(true);
-      setIsLoading(false);
     }
   };
   
@@ -87,8 +92,13 @@ function LoginForm() {
             onChange={handleInputChange}
             InputProps={{
               inputProps: {
-                pattern: '[a-zA-Z0-9]*',
+                pattern: /[a-zA-Z0-9]*/,
               },
+              startAdornment: (
+                  <InputAdornment position="start">
+                      <AccountCircle />
+                  </InputAdornment>
+              ),
             }}
             margin="normal"
             required fullWidth
@@ -96,34 +106,37 @@ function LoginForm() {
             label="ユーザ名"
             name="username"
             autoFocus
-            InputProps={{
-            startAdornment: (
-                <InputAdornment position="start">
-                    <AccountCircle />
-                </InputAdornment>
-            ),
-            }}
             variant="standard"
         />
         <TextField
+            type={showPassword ? 'text' : 'password'}
             onChange={handleInputChange}
             InputProps={{
               inputProps: {
                 pattern: '[a-zA-Z0-9]*',
               },
+              startAdornment: (
+                  <InputAdornment position="start">
+                      <LockIcon />
+                  </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
             }}
             margin="normal"
             required fullWidth
             id="Password"
             label="パスワード"
             name="password"
-            InputProps={{
-            startAdornment: (
-                <InputAdornment position="start">
-                    <LockIcon />
-                </InputAdornment>
-            ),
-            }}
             variant="standard"
         />
         
@@ -135,6 +148,11 @@ function LoginForm() {
                 inputProps: {
                   pattern: '[a-zA-Z0-9]*',
                 },
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <VerifiedUserIcon />
+                    </InputAdornment>
+                ),
               }}
               margin="normal"
               required fullWidth
@@ -142,13 +160,6 @@ function LoginForm() {
               label="認証コード"
               name="captcha"
               autoFocus
-              InputProps={{
-              startAdornment: (
-                  <InputAdornment position="start">
-                      <VerifiedUserIcon />
-                  </InputAdornment>
-              ),
-              }}
               variant="standard"
             />
           </Grid>

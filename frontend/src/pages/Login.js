@@ -11,10 +11,20 @@ import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 
 function LoginForm() {
+  const operators = ['+', '-', '*', '/'];
+  const getRandomOperator = () => {
+    const randomIndex = Math.floor(Math.random() * operators.length);
+    return operators[randomIndex];
+  };
+
   const navigate = useNavigate();
-  const [captcha, setCaptcha] = React.useState(Math.floor(Math.random() * 1000000));
+  const [captcha1, setCaptcha1] = React.useState(Math.floor(Math.random() * 10));
+  const [captcha2, setCaptcha2] = React.useState(Math.floor(Math.random() * 10));
+  const [captcha3, setCaptcha3] = React.useState(getRandomOperator());
   const handleCaptchaClick = () => {
-    setCaptcha(Math.floor(Math.random() * 1000000));
+    setCaptcha1(Math.floor(Math.random() * 10));
+    setCaptcha2(Math.floor(Math.random() * 10));
+    setCaptcha3(getRandomOperator());
   };
   const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,7 +33,6 @@ function LoginForm() {
     captcha: ''
   });
 
-  
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -165,8 +174,8 @@ function LoginForm() {
           </Grid>
           <Grid item xs={6}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
-              <Button variant="outlined" onClick={handleCaptchaClick}>
-                {captcha}
+              <Button variant="outlined" onClick={handleCaptchaClick} sx={{width: '100%'}}>
+                {captcha1}{captcha3}{captcha2}=?
               </Button>
             </Box>
           </Grid>

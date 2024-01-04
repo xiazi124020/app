@@ -56,6 +56,7 @@ function LoginForm() {
     }
   };
   
+
   const handleEnterKeyPress = (event) => {
     if (event.key === 'Enter' && !isEmpty(formData.username) && !isEmpty(formData.password)) {
       handleLogin();
@@ -71,7 +72,7 @@ function LoginForm() {
   }, [handleEnterKeyPress]);
 
   return (
-    <Box sx={{ color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',width: '100%',maxWidth: '400px', height: '100%',  padding: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',width: '100%',maxWidth: '400px', height: '100%', backgroundColor: '#F0FFFF', padding: 2 }}>
       <Typography component="h2" variant="h6">
         <b>株式会社ジェーシーエル　OA管理システム</b>
       </Typography>
@@ -81,7 +82,7 @@ function LoginForm() {
         </Alert>
       )}
       <Divider style={{backgroundColor: "red"}} />
-      <Box component="form" noValidate sx={{ mt: 1, }}>
+      <Box component="form" noValidate sx={{ mt: 1 }}>
         <TextField
             onChange={handleInputChange}
             InputProps={{
@@ -170,7 +171,7 @@ function LoginForm() {
 
 export default function Login() {
   return (
-    <Container component="main" maxWidth="false" sx={{ border: '2px solid #ccc', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'url("./images/background.df9c4cdb.webp")' }}>
+    <Container component="main" maxWidth="false" sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'url("./images/background.df9c4cdb.webp")' }}>
       <Box sx={{ mt: 8, mb: 8 }}>
         <LoginForm />
       </Box>

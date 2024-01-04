@@ -107,8 +107,9 @@ export default function Navbar({ children, pageTitle }) {
 
   const [subMenuOpen, setSubMenuOpen] = React.useState(false);
 
-  const handleSubMenuClick = () => {
+  const handleSubMenuClick = (event) => {
     setSubMenuOpen(!subMenuOpen);
+    event.stopPropagation();
   };
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -166,10 +167,6 @@ export default function Navbar({ children, pageTitle }) {
       },
     },
   }));
-
-  const handleDelete = () => {
-    console.info('You clicked the delete icon.');
-  };
   
   return (
     <Box sx={{ display: 'flex' }} id="navbar-drawer">
@@ -224,8 +221,7 @@ export default function Navbar({ children, pageTitle }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>ログアウト</MenuItem>
               </Menu>
             </div>
           )}

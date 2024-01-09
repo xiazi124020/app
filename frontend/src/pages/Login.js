@@ -215,7 +215,7 @@ function LoginForm() {
 
 export default function Login() {
   return (
-    <Container component="main" maxWidth="false" sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'url("./images/background.df9c4cdb.webp")' }}>
+    <Container component="main" maxWidth="false" sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'url("./images/businessman-2753324_1920.jpg")' }}>
       <Box sx={{ mt: 8, mb: 8 }}>
         <LoginForm />
       </Box>

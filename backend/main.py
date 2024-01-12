@@ -4,10 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 import json
 import tracemalloc
-from fastapi import Request
 from dal import DBPool
-import uvicorn
 from routes import api_router
+import os
 
 tracemalloc.start()
 
@@ -15,16 +14,9 @@ app = FastAPI()
 
 app.include_router(router=api_router)
 
-
-def read_config():
-    with open("config.json", "r") as config_file:
-        config = json.load(config_file)
-    return config
-
 async def init_db_pool():
     print("--------------------start db connect pool-------------------------")
-    config = read_config()
-    await DBPool.create(config["db_host"], config["db_port"], config["db_user"], config["db_password"], config["db_name"])
+    await DBPool.create(os.environ.get("db_host"), os.environ.get("db_port"), os.environ.get("db_user"), os.environ.get("db_password"), os.environ.get("db_name"))
 
 async def shutdown_db_pool():
     print("--------------------end read_template-------------------------")
